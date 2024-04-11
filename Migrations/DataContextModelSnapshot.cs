@@ -72,6 +72,9 @@ namespace PrometoFoodTrucksBackEnds.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
+                    b.Property<string>("FoodTruckName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Hash")
                         .HasColumnType("nvarchar(max)");
 
