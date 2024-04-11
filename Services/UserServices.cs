@@ -39,7 +39,7 @@ namespace PrometoFoodTrucksBackEnds.Services
                 newUser.Username = UserToAdd.Username;
                 newUser.Salt = hashPassword.Salt;
                 newUser.Hash = hashPassword.Hash;
-
+                _context.Add(newUser);
                 result = _context.SaveChanges() != 0;
 
 
