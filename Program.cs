@@ -17,7 +17,7 @@ builder.Services.AddDbContext<DataContext>(Options => Options.UseSqlServer(conne
 
 builder.Services.AddCors(options => options.AddPolicy("AppPolicy", 
  builder => {
-    builder.WithOrigins("http://localhost:5264", "http://localhost:3000")
+    builder.WithOrigins("http://localhost:5264", "http://localhost:3000", "https://prometofoodtrucks.vercel.app")
     .AllowAnyHeader()
     .AllowAnyMethod();
  }
