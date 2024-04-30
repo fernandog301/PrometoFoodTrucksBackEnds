@@ -37,7 +37,7 @@ namespace PrometoFoodTrucksBackEnds.Services
                 var hashPassword = HashPassword(UserToAdd.Password);
                 newUser.ID = UserToAdd.ID;
                 newUser.Username = UserToAdd.Username;
-                newUser.FoodTruckName = UserToAdd.FoodTruckName;
+                
                 newUser.Salt = hashPassword.Salt;
                 newUser.Hash = hashPassword.Hash;
 
