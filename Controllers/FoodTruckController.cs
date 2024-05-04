@@ -40,7 +40,7 @@ namespace PrometoFoodTrucksBackEnds.Controllers
         }
 
         [HttpGet]
-
+        [Route("GetAllFoodTrucks")]
         public IEnumerable<FoodTrucksIteamsModel> GetAllFoodTrucks()
         {
             return _data.GetAllFoodTrucks();
@@ -84,7 +84,6 @@ namespace PrometoFoodTrucksBackEnds.Controllers
 
         [HttpGet]
         [Route("GetUserByUsername")]
-
         public UserModel GetUserByUsername(string username)
         {
             return _data.GetUserByUsername(username);

@@ -40,22 +40,17 @@ namespace PrometoFoodTrucksBackEnds.Services
                 DECLARE @featureList nvarchar(max) =
                 (
                     SELECT
-                        'Feature'                                           as 'type',
-                        address                                             as 'properties.address',
-                        city                                                as 'properties.city',
-                        state                                               as 'properties.state',
-                        zipCode                                             as 'properties.zipCode',
-                        gender                                              as 'properties.gender',
-                        type                                                as 'properties.type',
-                        numberOfStalls                                      as 'properties.numberOfStalls',
-                        wheelchairAccessibility                             as 'properties.wheelchairAccessibility',
-                        hoursOfOperation                                    as 'properties.hoursOfOperation',
-                        openToPublic                                        as 'properties.openToPublic',
-                        keyRequired                                         as 'properties.keyRequired',
-                        babyChangingStation                                 as 'properties.babyChangingStation',
-                        cleanliness                                         as 'properties.cleanliness',
-                        safety                                              as 'properties.safety',
-                        openToPublic                                        as 'properties.openToPublic',
+                    'Feature'                                           as 'type',
+                    address                                             as 'properties.address',
+                    city                                                as 'properties.city',
+                    state                                               as 'properties.state',
+                    zipCode                                             as 'properties.zipCode',
+                    name                                                as 'properties.name',
+                    image                                               as 'properties.image',
+                    schedule                                            as 'properties.schedule',
+                    description                                         as 'properties.description',
+                    category                                            as 'properties.category',
+                    IsDeleted                                           as 'properties.IsDeleted',
                     (
                         SELECT
                             itemId                                      as 'itemId',
