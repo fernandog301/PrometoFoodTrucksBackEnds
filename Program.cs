@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddScoped<AppServices>();
 builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<PasswordServices>();
 builder.Services.AddScoped<FoodTrucksService>();

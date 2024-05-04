@@ -24,23 +24,14 @@ namespace PrometoFoodTrucksBackEnds.Controllers
 
 
 
-        [HttpGet]
-        [Route("GetAllFoodTrucks")]
-        public IEnumerable<FoodTrucksIteamsModel> GetAllFoodTrucks(int ID)
-        {
-            return _data.GetAllFoodTrucks(ID);
-        }
+        // [HttpGet]
+        // [Route("GetTruckInfo")]
+        // public UserModel GetTruckInfo(int truckId)
+        // {
+        //     return _data.GetTruckInfo(truckId);
+        // }
 
-
-
-        [HttpGet]
-        [Route("GetFoodTruckById")]
-        public FoodTrucksIteamsModel GetFoodTruckById(int id)
-        {
-            return _data.GetFoodTruckById(id);
-        }
-
-
+        // Add bathroom
         [HttpPost]
         [Route("AddFoodTruck")]
         public bool AddFoodTruck(FoodTrucksIteamsModel newFoodTruck)
@@ -48,20 +39,87 @@ namespace PrometoFoodTrucksBackEnds.Controllers
             return _data.AddFoodTruck(newFoodTruck);
         }
 
+        [HttpGet]
 
-        [HttpPut]
-        [Route("UpdateFoodTrucksItems")]
-        public bool UpdateFoodTrucksItems(FoodTrucksIteamsModel FoodTruckToUpdate)
+        public IEnumerable<FoodTrucksIteamsModel> GetAllFoodTrucks()
         {
-            return _data.UpdateFoodTrucksItems(FoodTruckToUpdate);
+            return _data.GetAllFoodTrucks();
         }
 
-        [HttpPut]
-        [HttpPut("UpdateFoodTruck/{id}/{FoodTruckName}")]
-        public bool UpdateFoodTrucks(int id, string FoodTruckName)
+        // Get bathrooms as GeoJSON data
+        [HttpGet]
+        [Route("GetAllFoodTrucksAsGeoJSON")]
+        public ActionResult<string> GetAllFoodTrucksAsGeoJSON()
         {
-            return _data.UpdateFoodTrucks(id, FoodTruckName);
+            // Retrieve GeoJSON data from the service
+            string geoJSON = _data.GetAllFoodTrucksAsGeoJSON();
+
+            // Check if data was found
+            if (string.IsNullOrEmpty(geoJSON))
+            {
+                return NotFound(); // Return 404 if no data found
+            }
+
+            return Ok(geoJSON);
         }
+
+        // Update bathroom
+        // Since we are updating a bathroom, we want to take in the entire BathroomModel and call it bathroomUpdate
+        [HttpPut]
+        [Route("UpdateFoodTruck")]
+        public bool UpdateFoodTruck(FoodTrucksIteamsModel FoodTruckUpdate)
+        {
+            return _data.UpdateFoodTruck(FoodTruckUpdate);
+        }
+
+        // Delete bathroom
+        [HttpDelete]
+        [Route("DeleteBathroom")]
+        public bool DeleteFoodTruck(FoodTrucksIteamsModel FoodTruckToDelete)
+        {
+            return _data.DeleteFoodTruck(FoodTruckToDelete);
+        }
+
+
+
+        [HttpGet]
+        [Route("GetUserByUsername")]
+
+        public UserModel GetUserByUsername(string username)
+        {
+            return _data.GetUserByUsername(username);
+        }
+
+
+        // [HttpGet]
+        // [Route("GetFoodTruckById")]
+        // public async FoodTrucksIteamsModel GetFoodTruckById(int id)
+        // {
+        //     return await _data.GetFoodTruckById(id);
+        // }
+
+
+        // [HttpPost]
+        // [Route("AddFoodTruck")]
+        // public bool AddTruckAsync(FoodTrucksIteamsModel truck)
+        // {
+        //     return _data.AddTruckAsync(truck);
+        // }
+
+
+        // [HttpPut]
+        // [Route("UpdateFoodTrucksItems")]
+        // public bool UpdateFoodTrucksItems(FoodTrucksIteamsModel FoodTruckToUpdate)
+        // {
+        //     return _data.UpdateFoodTrucksItems(FoodTruckToUpdate);
+        // }
+
+        // [HttpPut]
+        // [HttpPut("UpdateFoodTruck/{id}/{FoodTruckName}")]
+        // public bool UpdateFoodTrucks(int id, string FoodTruckName)
+        // {
+        //     return _data.UpdateFoodTrucks(id, FoodTruckName);
+        // }
 
 
         // [HttpGet]

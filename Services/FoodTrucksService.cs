@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using PrometoFoodTrucksBackEnds.Controllers;
 using PrometoFoodTrucksBackEnds.Models;
+using PrometoFoodTrucksBackEnds.Models.DTO;
 using PrometoFoodTrucksBackEnds.Services.Context;
+using static PrometoFoodTrucksBackEnds.Models.FoodTrucksIteamsModel;
 
 namespace PrometoFoodTrucksBackEnds.Services
 {
-    public class FoodTrucksService 
+    public class FoodTrucksService : ControllerBase
     {
         
         private readonly DataContext _context;
@@ -17,163 +21,237 @@ namespace PrometoFoodTrucksBackEnds.Services
             _context = context;
         }
 
-        public IEnumerable<FoodTrucksIteamsModel> GetAllFoodTrucks(int ID)
-        {
-            return _context.FoodTrucksInfo.Where(FoodTruck => FoodTruck.ID == ID).ToList();
-        }
-
-        
-
-        public FoodTrucksIteamsModel GetFoodTruckById(int id){
-            return _context.FoodTrucksInfo.SingleOrDefault(FoodTruck => FoodTruck.ID == id);
-        }
-
-        // public bool CreateNewFoodTruck(int ID, FoodTrucksIteamsModel newFoodTruck)
-        // {
-        //     // Ensure the club exists (Might want to add error handling if club doesn't exist)
-        //     var FoodTruck = _context.FoodTrucksInfo.FirstOrDefault(c => c.ID == ID);
-        //     if (FoodTruck == null)
-        //     {
-        //         // Club not found
-        //         return false; 
-        //     }
-          
-        //     newFoodTruck.ID = ID;
-        //     Console.WriteLine(newFoodTruck);
-
-        //     _context.FoodTrucksInfo.Add(newFoodTruck);
-        //     return _context.SaveChanges() != 0; 
-        // }
-
-        
-
-        public bool DoesUserExist(string FoodTruckName)
-        {
-            return _context.FoodTrucksInfo.SingleOrDefault(user => user.FoodTruckName == FoodTruckName) != null;
-        }
-
         public bool AddFoodTruck(FoodTrucksIteamsModel newFoodTruck)
         {
-            // bool result = false;
-
-            // if(!DoesUserExist(AddFoodTruck.FoodTruckName)){
-
-            //     FoodTrucksIteamsModel newFoodTruck = new FoodTrucksIteamsModel();
-
-            //     newFoodTruck.ID = AddFoodTruck.ID;
-                // newFoodTruck.FoodTruckName = AddFoodTruck.FoodTruckName;
-                // newFoodTruck.FoodTruckCategory = AddFoodTruck.FoodTruckCategory;
-                // newFoodTruck.ImageUrl = AddFoodTruck.ImageUrl;
-                // newFoodTruck.Description = AddFoodTruck.Description;
-                // newFoodTruck.Email = AddFoodTruck.Email;
-                // newFoodTruck.location = AddFoodTruck.location;
-                // newFoodTruck.FoodTruckPrices = AddFoodTruck.FoodTruckPrices;
-                // newFoodTruck.FoodTruckMenu = AddFoodTruck.FoodTruckMenu;
-                // newFoodTruck.FoodTruckHours = AddFoodTruck.FoodTruckHours;
-                // newFoodTruck.FoodTruckReviews = AddFoodTruck.FoodTruckReviews;
-                // newFoodTruck.IsThere = AddFoodTruck.IsThere;
-                // newFoodTruck.IsDeleted = AddFoodTruck.IsDeleted;
-
-                _context.Add(newFoodTruck);
-                return _context.SaveChanges() !=0;
-
-                // result = true;
-            // }
-            // return result;
+            _context.Add(newFoodTruck);
+            // Any return other than zero, we save changes. This is because this function is set up as a bool
+            return _context.SaveChanges() != 0;
         }
 
-        public bool DeletePFoodTruck(FoodTrucksIteamsModel FoodTruckToDelete){
+        public IEnumerable<FoodTrucksIteamsModel> GetAllFoodTrucks()
+        {
+            return _context.TruckInfos;
+        }
+
+        public string GetAllFoodTrucksAsGeoJSON()
+        {
+            // Your SQL query to generate GeoJSON data
+            string sqlQuery = @"
+                DECLARE @featureList nvarchar(max) =
+                (
+                    SELECT
+                        'Feature'                                           as 'type',
+                        address                                             as 'properties.address',
+                        city                                                as 'properties.city',
+                        state                                               as 'properties.state',
+                        zipCode                                             as 'properties.zipCode',
+                        gender                                              as 'properties.gender',
+                        type                                                as 'properties.type',
+                        numberOfStalls                                      as 'properties.numberOfStalls',
+                        wheelchairAccessibility                             as 'properties.wheelchairAccessibility',
+                        hoursOfOperation                                    as 'properties.hoursOfOperation',
+                        openToPublic                                        as 'properties.openToPublic',
+                        keyRequired                                         as 'properties.keyRequired',
+                        babyChangingStation                                 as 'properties.babyChangingStation',
+                        cleanliness                                         as 'properties.cleanliness',
+                        safety                                              as 'properties.safety',
+                        openToPublic                                        as 'properties.openToPublic',
+                    (
+                        SELECT
+                            itemId                                      as 'itemId',
+                            itemName                                    as 'itemName',
+                            itemPrice                                   as 'itemPrice'
+                        FROM MenuItems AS menu
+                        WHERE menu.truckId = foodTruck.truckId
+                        FOR JSON PATH
+                    )                                                   as 'properties.menuItems',
+                    'Point'                                             as 'geometry.type',
+                    JSON_QUERY(CONCAT('[', CAST(longitude AS NVARCHAR), ', ', CAST(latitude AS NVARCHAR), ']')) as 'geometry.coordinates'
+                FROM FoodTrucks AS foodTruck
+                FOR JSON PATH
+            )
+            
+
+                DECLARE @featureCollection nvarchar(max) = (
+                    SELECT 'FeatureCollection' as 'type',
+                    JSON_QUERY(@featureList)   as 'features'
+                    FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+                )
+
+                SELECT @featureCollection";
+
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetConnectionString()))
+            {
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+                connection.Open();
+
+                string geoJSON = (string)command.ExecuteScalar();
+
+                return geoJSON;
+            }
+        }
+
+
+        public bool UpdateFoodTruck(FoodTrucksIteamsModel FoodTruckUpdate)
+        {
+            _context.Update<FoodTrucksIteamsModel>(FoodTruckUpdate);
+            return _context.SaveChanges() != 0;
+        }
+
+        public bool DeleteFoodTruck(FoodTrucksIteamsModel FoodTruckToDelete)
+        {
             FoodTruckToDelete.IsDeleted = true;
             _context.Update<FoodTrucksIteamsModel>(FoodTruckToDelete);
             return _context.SaveChanges() != 0;
         }
-
-
-        public bool UpdateFoodTrucksItems(FoodTrucksIteamsModel FoodTruckToUpdate){
-            _context.Update<FoodTrucksIteamsModel>(FoodTruckToUpdate);
-            return _context.SaveChanges() != 0;
-        }
-        
-        public bool UpdateFoodTrucks(int id, string FoodTruckName)
+    
+        public UserModel GetUserByUsername(string username)
         {
-            FoodTrucksIteamsModel existingFoodTruck = GetFoodTruckById(id);
-
-            bool result = false;
-
-            if (existingFoodTruck != null)
-            {
-                existingFoodTruck.FoodTruckName = FoodTruckName;
-                _context.Update<FoodTrucksIteamsModel>(existingFoodTruck);
-                result = _context.SaveChanges() != 0;
-
-            }
-            return result;
+            return _context.UserInfo.SingleOrDefault(user => user.Username == username);
         }
 
-
-        // public IEnumerable<FoodTrucksIteamsModel> GetFoodTruckByCategory(int ID, string FoodTruckCatagory)
+        // public bool GetTruckInfo(string name)
         // {
-        //     var allItems = GetAllFoodTrucks(ID).ToList();
-        //     return allItems.Where(FoodTruck => FoodTruck.FoodTruckCategory == FoodTruckCatagory);
+        //     return _context.Properties.SingleOrDefault(user => user.name == name) != null;
         // }
 
-        // public IEnumerable<FoodTrucksIteamsModel> GetFoodTruckHours(int FoodTruckHours)
+
+        // public MenuItem GetFoodItems(int Id)
         // {
-        //     return _context.FoodTrucksInfo.Where(hours => hours.FoodTruckHours == FoodTruckHours).ToList();
+        //     return _context.MenuItem.SingleOrDefault(IdItem => IdItem.itemId == Id);
         // }
 
-        // public IEnumerable<FoodTrucksIteamsModel> GetFoodTruckMenu(int ID, string FoodTruckMenu)
+        // public bool AddMenu(MenuDTO AddIteams) 
         // {
-        //     var allItems = GetAllFoodTrucks(ID).ToList();
-        //     return allItems.Where(items => items.FoodTruckMenu == FoodTruckMenu);
+        //     bool result = false;
+        //     UserModel foundUser = GetUserByUsername(AddIteams.itemId);
+
+
+        //     if(!GetTruckInfo(AddIteams.name))
+        //     {
+        //         FoodTrucksIteamsModel foodTrucksModel = new FoodTrucksIteamsModel();
+
+        //     }
         // }
 
-        // public IEnumerable<FoodTrucksIteamsModel> GetFoodTrucklocation(int ID, string location)
-        // {   
-        //     var allItems = GetAllFoodTrucks(ID).ToList();
-        //     return allItems.Where(items => items.location == location);
+        // public bool AddMenuItems(MenuDTO menuToAdd)
+        // {
+        //     bool result = false;
+        //     if(!GetTruckInfo(menuToAdd.name))
+        //     {
+
+        //     }
         // }
 
-        // public IEnumerable<FoodTrucksIteamsModel> GetFoodTrucksPrices(int ID, int Price)
+        // public MenuDTO GetMenuItemsAsync(int itemId)
         // {
-        //     var allItems = GetAllFoodTrucks(ID).ToList();
-        //     return allItems.Where(items => items.FoodTruckPrices == Price);
+        //     MenuDTO MenuInfo = new MenuDTO();
+
+        //     MenuItem foundUser = _context.MenuItem.SingleOrDefault(user => user.itemId == itemId);
+
+        //     MenuInfo.itemId = foundUser.itemId;
+        //     return MenuInfo;
         // }
 
-        // public IEnumerable<FoodTrucksIteamsModel> GetFoodTrucksDays(int ID, string Day)
+        // public async Task<IEnumerable<FoodTrucksIteamsModel>> GetAllTrucksAsync()
         // {
-        //     var allItems = GetAllFoodTrucks(ID).ToList();
-        //     return allItems.Where(items => items.FoodTruckDays == Day);
+        //     return await _context.TruckInfos.ToListAsync();
         // }
 
-        // public IEnumerable<FoodTrucksIteamsModel> GetFoodTruckName(int ID, string FoodTruckName)
+        // public bool AddTruckItems(Properties truckItemsToAdd)
         // {
-        //     var allItems = GetAllFoodTrucks(ID).ToList();
-        //     return allItems.Where(items => items.FoodTruckName == FoodTruckName);
+        //     bool falseId = true;
+
+        //     if(!GetTruckInfo(truckItemsToAdd.truckId))
+        //     {
+
+        //     }
+        //     UserModel FoundUser = GetTruckInfo(truck.name);
+
+
+        //     _context.TruckInfos.Add(truck);
+        //     return _context.SaveChanges() !=0;
         // }
 
-        // public IEnumerable<FoodTrucksIteamsModel> GetFoodTrucksImageUrl(int ID, string ImageUrl)
+        // public async Task<bool> UpdateTruckAsync(Properties updatedFoodTruck)
         // {
-        //     var allItems = GetAllFoodTrucks(ID).ToList();
-        //     return allItems.Where(items => items.ImageUrl == ImageUrl);
+        //     _context.Update<Properties>(updatedFoodTruck);
+        //     return _context.SaveChanges() !=0;
         // }
 
-        // public IEnumerable<FoodTrucksIteamsModel> GetFoodTrucksDescription(int ID, string Description)
+        // public bool DeleteTruckAsync(int truckId)
         // {
-        //     var allItems = GetAllFoodTrucks(ID).ToList();
-        //     return allItems.Where(items => items.Description == Description);
+        //     var truckToDelete = GetTruckInfo(truckId);
+        //     if (truckToDelete != null)
+        //     {
+        //         _context.TruckInfos.Remove(truckToDelete);
+        //         return _context.SaveChanges() !=0;
+        //     }
+        //     else
+        //     {
+        //         throw new InvalidOperationException("Truck not found.");
+        //     }
         // }
 
-        // public IEnumerable<FoodTrucksIteamsModel> GetFoodTrucksEmail(int ID, string Email)
+    
+        // public bool AddMenuItemAsync(int truckId, MenuItem menuItem)
         // {
-        //     var allItems = GetAllFoodTrucks(ID).ToList();
-        //     return allItems.Where(items => items.Email == Email);
+        //     var truck = await _context.TruckInfos.GetTruckInfo(truckId);
+        //     if (truck != null)
+        //     {
+        //         truck.MenuItem.Add(menuItem);
+        //         return _context.SaveChanges() != 0;
+        //     }
+        //     else
+        //     {
+        //         throw new InvalidOperationException("Truck not found.");
+        //     }
         // }
 
-        // public IEnumerable<FoodTrucksIteamsModel> GetFoodTrucksFoodTruckReviews(int ID, string FoodTruckReviews)
+        // public async Task UpdateMenuItemAsync(int truckId, int itemId, MenuItem menuItem)
         // {
-        //     var allItems = GetAllFoodTrucks(ID).ToList();
-        //     return allItems.Where(items => items.FoodTruckReviews == FoodTruckReviews);
+        //     var truck = await _context.TruckInfos.GetTruckInfo(truckId);
+        //     if (truck != null)
+        //     {
+        //         var existingMenuItem = truck.MenuItems.FirstOrDefault(item => item.ItemId == itemId);
+        //         if (existingMenuItem != null)
+        //         {
+        //             existingMenuItem.Name = menuItem.itemName;
+        //             existingMenuItem.Price = menuItem.itemPrice;
+        //             // Update other properties as needed
+        //             await _context.SaveChangesAsync();
+        //         }
+        //         else
+        //         {
+        //             throw new InvalidOperationException("Menu item not found.");
+        //         }
+        //     }
+        //     else
+        //     {
+        //         throw new InvalidOperationException("Truck not found.");
+        //     }
+        // }
+
+        // public async Task DeleteMenuItemAsync(int truckId, int itemId)
+        // {
+        //     var truck = await _context.TruckInfos.GetTruckInfo(truckId);
+        //     if (truck != null)
+        //     {
+        //         var menuItemToDelete = truck.MenuItems.FirstOrDefault(item => item.ItemId == itemId);
+        //         if (menuItemToDelete != null)
+        //         {
+        //             truck.MenuItems.Remove(menuItemToDelete);
+        //             await _context.SaveChangesAsync();
+        //         }
+        //         else
+        //         {
+        //             throw new InvalidOperationException("Menu item not found.");
+        //         }
+        //     }
+        //     else
+        //     {
+        //         throw new InvalidOperationException("Truck not found.");
+        //     }
         // }
 
     }
