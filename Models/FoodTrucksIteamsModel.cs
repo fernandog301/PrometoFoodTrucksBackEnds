@@ -33,13 +33,15 @@ namespace PrometoFoodTrucksBackEnds.Models
             public List<MenuItem>? menuItems { get; set; }
 
             public class MenuItem
-        {
+            {
+            public int TruckId { get; set; } // Foreign key to link to FoodTrucks table
+
             public int itemId { get; set; }
 
             public string? itemName { get; set; }
 
-            public double? itemPrice { get; set; }
-        }
+            public string? itemPrice { get; set; }
+            }
         
 
         

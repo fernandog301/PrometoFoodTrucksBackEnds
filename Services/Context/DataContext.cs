@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PrometoFoodTrucksBackEnds.Models;
+using PrometoFoodTrucksBackEnds.Models.DTO;
 using static PrometoFoodTrucksBackEnds.Models.FoodTrucksIteamsModel;
 
 namespace PrometoFoodTrucksBackEnds.Services.Context;
@@ -17,11 +18,11 @@ namespace PrometoFoodTrucksBackEnds.Services.Context;
         public DbSet<FoodTrucksIteamsModel>TruckInfos{ get; set; }
         // public DbSet<Geometry>Geometry{ get; set; }
         // public DbSet<Properties>Properties{ get; set; }
-        // public DbSet<MenuItem>MenuItem{ get; set; }
+        public DbSet<MenuDTO>MenuItem{ get; set; }
         // public DbSet<Location>Location{ get; set; }
 
 
-        public DataContext(DbContextOptions options): base(options){}
+        public DataContext(DbContextOptions <DataContext> options): base(options){}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

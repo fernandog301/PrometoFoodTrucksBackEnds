@@ -28,6 +28,45 @@ namespace PrometoFoodTrucksBackEnds.Services
             return _context.SaveChanges() != 0;
         }
 
+        // Start
+        
+
+        public bool AddMenu(MenuDTO menuToAdd)
+        {
+            var truck = _context.TruckInfos.FirstOrDefault(t => t.ID == menuToAdd.TruckId);
+            if (truck != null)
+            {
+                MenuItem menuItem = new MenuItem
+                {
+                    itemId = menuToAdd.TruckId,
+                    itemName = menuToAdd.itemName,
+                    itemPrice = Convert.ToString(menuToAdd.itemPrice) // Convert string to decimal
+                };
+                _context.MenuItem.Add(menuItem);
+                return _context.SaveChanges() != 0;
+            }
+            return false; // If truck with given id doesn't exist
+        }
+
+        public bool DeleteMenuItem(int itemId)
+        {
+            var menuItemToDelete = _context.MenuItem.FirstOrDefault(m => m.itemId == itemId);
+            if (menuItemToDelete != null)
+            {
+                _context.MenuItem.Remove(menuItemToDelete);
+                return _context.SaveChanges() != 0;
+            }
+            return false; // If menu item with given id doesn't exist
+        }
+
+        public bool UpdateMenuItem(MenuItem menuItems)
+        {
+            _context.MenuItem.Update(menuItems);
+            return _context.SaveChanges() != 0;
+        }
+
+    // End
+
         public IEnumerable<FoodTrucksIteamsModel> GetAllFoodTrucks()
         {
             return _context.TruckInfos;
@@ -104,149 +143,9 @@ namespace PrometoFoodTrucksBackEnds.Services
             return _context.UserInfo.SingleOrDefault(user => user.Username == username);
         }
 
-        // public bool GetTruckInfo(string name)
-        // {
-        //     return _context.Properties.SingleOrDefault(user => user.name == name) != null;
-        // }
 
 
-        // public MenuItem GetFoodItems(int Id)
-        // {
-        //     return _context.MenuItem.SingleOrDefault(IdItem => IdItem.itemId == Id);
-        // }
 
-        // public bool AddMenu(MenuDTO AddIteams) 
-        // {
-        //     bool result = false;
-        //     UserModel foundUser = GetUserByUsername(AddIteams.itemId);
-
-
-        //     if(!GetTruckInfo(AddIteams.name))
-        //     {
-        //         FoodTrucksIteamsModel foodTrucksModel = new FoodTrucksIteamsModel();
-
-        //     }
-        // }
-
-        // public bool AddMenuItems(MenuDTO menuToAdd)
-        // {
-        //     bool result = false;
-        //     if(!GetTruckInfo(menuToAdd.name))
-        //     {
-
-        //     }
-        // }
-
-        // public MenuDTO GetMenuItemsAsync(int itemId)
-        // {
-        //     MenuDTO MenuInfo = new MenuDTO();
-
-        //     MenuItem foundUser = _context.MenuItem.SingleOrDefault(user => user.itemId == itemId);
-
-        //     MenuInfo.itemId = foundUser.itemId;
-        //     return MenuInfo;
-        // }
-
-        // public async Task<IEnumerable<FoodTrucksIteamsModel>> GetAllTrucksAsync()
-        // {
-        //     return await _context.TruckInfos.ToListAsync();
-        // }
-
-        // public bool AddTruckItems(Properties truckItemsToAdd)
-        // {
-        //     bool falseId = true;
-
-        //     if(!GetTruckInfo(truckItemsToAdd.truckId))
-        //     {
-
-        //     }
-        //     UserModel FoundUser = GetTruckInfo(truck.name);
-
-
-        //     _context.TruckInfos.Add(truck);
-        //     return _context.SaveChanges() !=0;
-        // }
-
-        // public async Task<bool> UpdateTruckAsync(Properties updatedFoodTruck)
-        // {
-        //     _context.Update<Properties>(updatedFoodTruck);
-        //     return _context.SaveChanges() !=0;
-        // }
-
-        // public bool DeleteTruckAsync(int truckId)
-        // {
-        //     var truckToDelete = GetTruckInfo(truckId);
-        //     if (truckToDelete != null)
-        //     {
-        //         _context.TruckInfos.Remove(truckToDelete);
-        //         return _context.SaveChanges() !=0;
-        //     }
-        //     else
-        //     {
-        //         throw new InvalidOperationException("Truck not found.");
-        //     }
-        // }
-
-    
-        // public bool AddMenuItemAsync(int truckId, MenuItem menuItem)
-        // {
-        //     var truck = await _context.TruckInfos.GetTruckInfo(truckId);
-        //     if (truck != null)
-        //     {
-        //         truck.MenuItem.Add(menuItem);
-        //         return _context.SaveChanges() != 0;
-        //     }
-        //     else
-        //     {
-        //         throw new InvalidOperationException("Truck not found.");
-        //     }
-        // }
-
-        // public async Task UpdateMenuItemAsync(int truckId, int itemId, MenuItem menuItem)
-        // {
-        //     var truck = await _context.TruckInfos.GetTruckInfo(truckId);
-        //     if (truck != null)
-        //     {
-        //         var existingMenuItem = truck.MenuItems.FirstOrDefault(item => item.ItemId == itemId);
-        //         if (existingMenuItem != null)
-        //         {
-        //             existingMenuItem.Name = menuItem.itemName;
-        //             existingMenuItem.Price = menuItem.itemPrice;
-        //             // Update other properties as needed
-        //             await _context.SaveChangesAsync();
-        //         }
-        //         else
-        //         {
-        //             throw new InvalidOperationException("Menu item not found.");
-        //         }
-        //     }
-        //     else
-        //     {
-        //         throw new InvalidOperationException("Truck not found.");
-        //     }
-        // }
-
-        // public async Task DeleteMenuItemAsync(int truckId, int itemId)
-        // {
-        //     var truck = await _context.TruckInfos.GetTruckInfo(truckId);
-        //     if (truck != null)
-        //     {
-        //         var menuItemToDelete = truck.MenuItems.FirstOrDefault(item => item.ItemId == itemId);
-        //         if (menuItemToDelete != null)
-        //         {
-        //             truck.MenuItems.Remove(menuItemToDelete);
-        //             await _context.SaveChangesAsync();
-        //         }
-        //         else
-        //         {
-        //             throw new InvalidOperationException("Menu item not found.");
-        //         }
-        //     }
-        //     else
-        //     {
-        //         throw new InvalidOperationException("Truck not found.");
-        //     }
-        // }
 
     }
 }
