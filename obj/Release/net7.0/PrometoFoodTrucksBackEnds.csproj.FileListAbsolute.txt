@@ -106,3 +106,5 @@ C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\appsettings.json
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\PrometoFoodTrucksBackEnds.deps.json
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\PrometoFoodTrucksBackEnds.runtimeconfig.json
+C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\GeoJSON.Net.dll
+C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\Newtonsoft.Json.dll

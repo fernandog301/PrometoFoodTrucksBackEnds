@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using PrometoFoodTrucksBackEnds.Models;
 using PrometoFoodTrucksBackEnds.Models.DTO;
 using PrometoFoodTrucksBackEnds.Services;
+using static PrometoFoodTrucksBackEnds.Models.FoodTrucksIteamsModel;
 
 namespace PrometoFoodTrucksBackEnds.Controllers
 {
@@ -74,7 +75,7 @@ namespace PrometoFoodTrucksBackEnds.Controllers
 
         // Delete bathroom
         [HttpDelete]
-        [Route("DeleteBathroom")]
+        [Route("DeleteFoodTruck")]
         public bool DeleteFoodTruck(FoodTrucksIteamsModel FoodTruckToDelete)
         {
             return _data.DeleteFoodTruck(FoodTruckToDelete);
@@ -87,6 +88,27 @@ namespace PrometoFoodTrucksBackEnds.Controllers
         public UserModel GetUserByUsername(string username)
         {
             return _data.GetUserByUsername(username);
+        }
+
+        [HttpPost]
+        [Route("AddMenu")]
+        public bool AddMenu(MenuItem menuToAdd)
+        {
+            return _data.AddMenu(menuToAdd);
+        }
+
+        [HttpDelete]
+        [Route("DeleteMenuItem")]
+        public bool DeleteMenuItem(int itemId)
+        {
+            return _data.DeleteMenuItem(itemId);
+        }
+
+        [HttpPut]
+        [Route("UpdateMenuItem")]
+        public bool UpdateMenuItem(MenuItem menuItems)
+        {
+            return _data.UpdateMenuItem(menuItems);
         }
 
 

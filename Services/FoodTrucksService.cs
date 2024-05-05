@@ -31,18 +31,18 @@ namespace PrometoFoodTrucksBackEnds.Services
         // Start
         
 
-        public bool AddMenu(MenuDTO menuToAdd)
+        public bool AddMenu(MenuItem menuToAdd)
         {
-            var truck = _context.TruckInfos.FirstOrDefault(t => t.ID == menuToAdd.TruckId);
+            var truck = _context.TruckInfos.FirstOrDefault(t => t.ID == menuToAdd.itemId);
             if (truck != null)
             {
                 MenuItem menuItem = new MenuItem
                 {
-                    itemId = menuToAdd.TruckId,
+                    // itemId = menuToAdd.TruckId,
                     itemName = menuToAdd.itemName,
                     itemPrice = Convert.ToString(menuToAdd.itemPrice) // Convert string to decimal
                 };
-                _context.MenuItem.Add(menuItem);
+                _context.MenuItems.Add(menuItem);
                 return _context.SaveChanges() != 0;
             }
             return false; // If truck with given id doesn't exist
@@ -50,10 +50,10 @@ namespace PrometoFoodTrucksBackEnds.Services
 
         public bool DeleteMenuItem(int itemId)
         {
-            var menuItemToDelete = _context.MenuItem.FirstOrDefault(m => m.itemId == itemId);
+            var menuItemToDelete = _context.MenuItems.FirstOrDefault(m => m.itemId == itemId);
             if (menuItemToDelete != null)
             {
-                _context.MenuItem.Remove(menuItemToDelete);
+                _context.MenuItems.Remove(menuItemToDelete);
                 return _context.SaveChanges() != 0;
             }
             return false; // If menu item with given id doesn't exist
@@ -61,7 +61,7 @@ namespace PrometoFoodTrucksBackEnds.Services
 
         public bool UpdateMenuItem(MenuItem menuItems)
         {
-            _context.MenuItem.Update(menuItems);
+            _context.MenuItems.Update(menuItems);
             return _context.SaveChanges() != 0;
         }
 
@@ -90,17 +90,10 @@ namespace PrometoFoodTrucksBackEnds.Services
                     description                                         as 'properties.description',
                     category                                            as 'properties.category',
                     IsDeleted                                           as 'properties.IsDeleted',
-                    (
-                        SELECT
-                            itemId                                      as 'itemId',
-                            itemName                                    as 'itemName',
-                            itemPrice                                   as 'itemPrice'
-                        FROM MenuItems AS menu
-                        WHERE menu.truckId = foodTruck.truckId
-                        FOR JSON PATH
-                    )                                                   as 'properties.menuItems',
+                    
                     'Point'                                             as 'geometry.type',
-                    JSON_QUERY(CONCAT('[', CAST(longitude AS decimal(18, 15)), ', ', CAST(latitude AS decimal(18, 15)), ']')) as 'geometry.coordinates'                FROM FoodTrucks AS foodTruck
+                    JSON_QUERY(CONCAT('[', CAST(longitude AS decimal(18, 15)), ', ', CAST(latitude AS decimal(18, 15)), ']')) as 'geometry.coordinates'                
+                    FROM TruckInfos
                 FOR JSON PATH
             )
             
@@ -142,10 +135,6 @@ namespace PrometoFoodTrucksBackEnds.Services
         {
             return _context.UserInfo.SingleOrDefault(user => user.Username == username);
         }
-
-
-
-
 
     }
 }

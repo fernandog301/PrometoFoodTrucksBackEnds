@@ -11,6 +11,7 @@ C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\PrometoFoodTrucksBackEnds.pdb
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\Azure.Core.dll
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\Azure.Identity.dll
+C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\GeoJSON.Net.dll
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\Microsoft.Data.SqlClient.dll
@@ -32,6 +33,7 @@ C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\Microsoft.OpenApi.dll
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\Microsoft.SqlServer.Server.dll
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\Microsoft.Win32.SystemEvents.dll
+C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\Newtonsoft.Json.dll
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\SQLitePCLRaw.batteries_v2.dll
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\SQLitePCLRaw.core.dll
 C:\Users\Fernando Gutierrez\CodeStack\PrometoFoodTrucksBackEnds\bin\Release\net7.0\publish\SQLitePCLRaw.provider.e_sqlite3.dll

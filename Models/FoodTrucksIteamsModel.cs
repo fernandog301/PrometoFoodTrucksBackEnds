@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using PrometoFoodTrucksBackEnds.Models.DTO;
 
 namespace PrometoFoodTrucksBackEnds.Models
 {
@@ -30,20 +32,32 @@ namespace PrometoFoodTrucksBackEnds.Models
             public string? Rating { get; set; }
             public bool? IsDeleted { get; set; }
 
-            public List<MenuItem>? menuItems { get; set; }
+            public List<MenuItem> menuItems { get; set; }
 
+            // public class MenuItem
+            // {
+            // // public int TruckId { get; set; } // Foreign key to link to FoodTrucks table
+            // [Key]
             public class MenuItem
-            {
-            public int TruckId { get; set; } // Foreign key to link to FoodTrucks table
-
+    {
+            
+            [Key]
             public int itemId { get; set; }
 
             public string? itemName { get; set; }
 
             public string? itemPrice { get; set; }
-            }
+    }
         
-
+// (
+                    //     SELECT
+                    //         itemId                                      as 'itemId',
+                    //         itemName                                    as 'itemName',
+                    //         itemPrice                                   as 'itemPrice'
+                    //     FROM MenuItems AS menu
+                    //     WHERE menu.ID  = TruckInfos.itemId
+                    //     FOR JSON PATH
+                    // )                                                   as 'properties.menuItems',
         
 
 
