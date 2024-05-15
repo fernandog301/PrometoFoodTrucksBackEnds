@@ -31,6 +31,20 @@ namespace PrometoFoodTrucksBackEnds.Controllers
             return _data.Login(User);
         }
 
+        [HttpPut]
+        [Route("FoodTrucksWithUser")]
+        public void FoodTrucksWithUser(int userId, int FoodTrucksID)
+        {
+            _data.FoodTrucksWithUser(userId, FoodTrucksID);
+        }
+
+        [HttpDelete]
+        [Route("RemoveFoodTruckFromUser")]
+        public void RemoveFoodTruckFromUser(int userId)
+        {
+            _data.RemoveFoodTruckFromUser(userId);
+
+        }
 
         //AddUser endpoint
         //if user already exists (check this)

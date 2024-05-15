@@ -57,10 +57,15 @@ namespace PrometoFoodTrucksBackEnds.Services
             var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);
             var FoodTruck = _context.TruckInfos.SingleOrDefault(truck => truck.ID == FoodTrucksID);
             if(user != null && FoodTruck != null){
-                user.FoodTrucksItems = FoodTruck;
+                if(user.FoodTrucksItems == null)
+                {
+                user.FoodTrucksItems = new List<FoodTrucksIteamsModel>();
+                }
+                user.FoodTrucksItems.Add(FoodTruck);
                 _context.SaveChanges();
             }
         }
+        
         public void RemoveFoodTruckFromUser(int userId)
         {
             var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);

@@ -15,7 +15,7 @@ namespace PrometoFoodTrucksBackEnds.Models
             public int ID { get; set; }
 
             public int UserId { get; set;}
-            public UserModel User { get; set;}
+            public UserModel? User { get; set;}
             public string? Address { get; set; }
             public string? City { get; set; }
             public string? State { get; set; }
@@ -43,7 +43,6 @@ namespace PrometoFoodTrucksBackEnds.Models
             // [Key]
             public class MenuItem
     {
-            public FoodTrucksIteamsModel? FoodTrucks { get; set; }
             public int FoodTrucksID { get; set;} 
             [Key]
             public int itemId { get; set; }

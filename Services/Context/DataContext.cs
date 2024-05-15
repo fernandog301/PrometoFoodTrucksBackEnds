@@ -28,23 +28,29 @@ namespace PrometoFoodTrucksBackEnds.Services.Context;
         {
             // base.OnModelCreating(modelBuilder);
             // SeedData(modelBuilder);
-            modelBuilder.Entity<MenuItem>()
+            modelBuilder.Entity<FoodTrucksIteamsModel>()
             
             // .HasKey(m => m.itemId)
             // .HasMany(menu => menu.Menu) // Menu has many Items
-            .HasOne(u  => u.FoodTrucks) 
-            .WithMany(u => u.menuItems)
-            .HasForeignKey(u => u.FoodTrucksID);
+            .HasOne(u  => u.User) 
+            .WithMany(u => u.FoodTrucksItems)
+            .HasForeignKey(u => u.UserId);
+            
+            modelBuilder.Entity<UserModel>()
+                .HasKey(u => u.UserID);
+
+            // modelBuilder.Entity<UserModel>().HasNoKey();
+
             // Item belongs to one Menu
             // .HasForeignKey(item => item.MenuDTOId); // Foreign key property
             
-            modelBuilder.Entity<MenuItem>()
-            .Property(u => u.itemName)
-            .HasMaxLength(100);
+            // modelBuilder.Entity<MenuItem>()
+            // .Property(u => u.itemName)
+            // .HasMaxLength(100);
 
-            modelBuilder.Entity<MenuItem>()
-            .Property(u => u.itemPrice)
-            .HasColumnType("decimal(18,2)");
+            // modelBuilder.Entity<MenuItem>()
+            // .Property(u => u.itemPrice)
+            // .HasColumnType("decimal(18,2)");
 
 
         }
