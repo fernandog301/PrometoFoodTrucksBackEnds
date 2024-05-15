@@ -21,54 +21,12 @@ namespace PrometoFoodTrucksBackEnds.Services
             _context = context;
         }
 
-        public bool AddFoodTruck(FoodTrucksIteamsModel newFoodTruck)
-        {
-            _context.Add(newFoodTruck);
-            // Any return other than zero, we save changes. This is because this function is set up as a bool
-            return _context.SaveChanges() != 0;
-        }
-
-        // Start
-        
-
-        public bool AddMenu(MenuItem menuToAdd)
-        {
-            var truck = _context.TruckInfos.FirstOrDefault(t => t.ID == menuToAdd.itemId);
-            if (truck != null)
-            {
-                MenuItem menuItem = new MenuItem
-                {
-                    // itemId = menuToAdd.TruckId,
-                    itemName = menuToAdd.itemName,
-                    itemPrice = Convert.ToString(menuToAdd.itemPrice) // Convert string to decimal
-                };
-                _context.MenuItems.Add(menuItem);
-                return _context.SaveChanges() != 0;
-            }
-            return false; // If truck with given id doesn't exist
-        }
-
-        public bool DeleteMenuItem(int itemId)
-        {
-            var menuItemToDelete = _context.MenuItems.FirstOrDefault(m => m.itemId == itemId);
-            if (menuItemToDelete != null)
-            {
-                _context.MenuItems.Remove(menuItemToDelete);
-                return _context.SaveChanges() != 0;
-            }
-            return false; // If menu item with given id doesn't exist
-        }
-
-        public bool UpdateMenuItem(MenuItem menuItems)
-        {
-            _context.MenuItems.Update(menuItems);
-            return _context.SaveChanges() != 0;
-        }
 
     // End
 
         public IEnumerable<FoodTrucksIteamsModel> GetAllFoodTrucks()
         {
+            
             return _context.TruckInfos;
         }
 
@@ -117,23 +75,113 @@ namespace PrometoFoodTrucksBackEnds.Services
             }
         }
 
-
-        public bool UpdateFoodTruck(FoodTrucksIteamsModel FoodTruckUpdate)
+        public List<FoodTrucksIteamsModel>GetAllFoodTruckItems()
         {
-            _context.Update<FoodTrucksIteamsModel>(FoodTruckUpdate);
+            return _context.TruckInfos.ToList();
+        }
+
+        public void CreateFoodTruckForUser(int userId, FoodTrucksIteamsModel foodTrucks)
+        {
+            var user = _context.UserInfo.FirstOrDefault(u => u.UserID == userId);
+            if (user != null)
+            {
+                    foodTrucks.UserId = userId;
+                    _context.TruckInfos.Add(foodTrucks);
+                    _context.SaveChanges();
+            }
+        }
+
+        public bool AddFoodTruckItems(FoodTrucksIteamsModel foodTruckItems)
+        {
+            _context.TruckInfos.Add(foodTruckItems);
             return _context.SaveChanges() != 0;
         }
 
-        public bool DeleteFoodTruck(FoodTrucksIteamsModel FoodTruckToDelete)
+        public void UpdateFoodTruckForUser(int userId, FoodTrucksIteamsModel FoodTruckUpdate)
         {
-            FoodTruckToDelete.IsDeleted = true;
-            _context.Update<FoodTrucksIteamsModel>(FoodTruckToDelete);
-            return _context.SaveChanges() != 0;
+            var exisitingIteam = _context.TruckInfos.FirstOrDefault(ft => ft.UserId == userId);
+            if (exisitingIteam != null)
+            {
+                exisitingIteam.Name = FoodTruckUpdate.Name;
+                exisitingIteam.image = FoodTruckUpdate.image;
+                exisitingIteam.schedule = FoodTruckUpdate.schedule;
+                exisitingIteam.description = FoodTruckUpdate.description;
+                exisitingIteam.category = FoodTruckUpdate.category;
+                exisitingIteam.Rating = FoodTruckUpdate.Rating;
+                exisitingIteam.Address = FoodTruckUpdate.Address;
+                exisitingIteam.State = FoodTruckUpdate.State;
+                exisitingIteam.ZipCode = FoodTruckUpdate.ZipCode;
+                exisitingIteam.Latitude = FoodTruckUpdate.Latitude;
+                exisitingIteam.Longitude = FoodTruckUpdate.Longitude;
+                _context.SaveChanges();
+            }
         }
-    
+
+
+
+        public void DeleteFoodTruckForUser(int userId)
+        {
+            var itemsToDelete = _context.TruckInfos.FirstOrDefault(ft => ft.UserId == userId);
+
+            if (itemsToDelete != null)
+            {
+                _context.TruckInfos.Remove(itemsToDelete);
+                _context.SaveChanges();    
+            
+                }
+        }
+
         public UserModel GetUserByUsername(string username)
         {
             return _context.UserInfo.SingleOrDefault(user => user.Username == username);
+        }
+        
+
+
+        public void AddMenuForFoodTruck(int userId, MenuItem menuToAdd)
+        {
+            var truck = _context.TruckInfos.FirstOrDefault(t => t.UserId == userId);
+
+            if (truck != null)
+            {
+                menuToAdd.FoodTrucksID = truck.ID;
+                // MenuItem menuItem = new MenuItem
+                // {
+                //     // itemId = menuToAdd.TruckId,
+                //     itemName = menuToAdd.itemName,
+                //     itemPrice = Convert.ToString(menuToAdd.itemPrice) // Convert string to decimal
+                // };
+                _context.MenuItems.Add(menuToAdd);
+                _context.SaveChanges();
+            }
+            // return false; // If truck with given id doesn't exist
+        }
+
+        public void DeleteMenuItem(int userId, int menuItemId)
+        {
+            var existingFoodTruck = _context.TruckInfos.FirstOrDefault(t => t.UserId == userId);
+            var menuItemToDelete = _context.MenuItems.FirstOrDefault(mi => mi.FoodTrucksID == existingFoodTruck.ID && mi.itemId == menuItemId);
+
+            if (existingFoodTruck != null)
+            {
+                _context.MenuItems.Remove(menuItemToDelete);
+                _context.SaveChanges();
+            }
+            // return false; // If menu item with given id doesn't exist
+        }
+
+        public void UpdateMenuItem(int userId, string newItemName, string newItemPrice,  MenuItem updateMenuItem)
+        {
+            var existingFoodTruck = _context.TruckInfos.FirstOrDefault(t => t.UserId == userId);
+            var menuItemToUpdate = _context.MenuItems.FirstOrDefault(mi => mi.FoodTrucksID == existingFoodTruck.ID && mi.itemId == updateMenuItem.itemId);
+            
+            if (existingFoodTruck != null && menuItemToUpdate != null)
+            {
+                menuItemToUpdate.itemName = newItemName;
+
+                menuItemToUpdate.itemPrice = newItemPrice;
+                _context.SaveChanges();
+            } 
         }
 
     }

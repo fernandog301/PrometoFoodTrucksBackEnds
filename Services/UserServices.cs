@@ -35,7 +35,7 @@ namespace PrometoFoodTrucksBackEnds.Services
                 UserModel newUser = new UserModel();
 
                 var hashPassword = HashPassword(UserToAdd.Password);
-                newUser.ID = UserToAdd.ID;
+                newUser.UserID = UserToAdd.ID;
                 newUser.Username = UserToAdd.Username;
                 
                 newUser.Salt = hashPassword.Salt;
@@ -52,6 +52,23 @@ namespace PrometoFoodTrucksBackEnds.Services
         //return _data.AddUser(UserToAdd);
         }
 
+        public void FoodTrucksWithUser(int userId, int FoodTrucksID)
+        {
+            var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);
+            var FoodTruck = _context.TruckInfos.SingleOrDefault(truck => truck.ID == FoodTrucksID);
+            if(user != null && FoodTruck != null){
+                user.FoodTrucksItems = FoodTruck;
+                _context.SaveChanges();
+            }
+        }
+        public void RemoveFoodTruckFromUser(int userId)
+        {
+            var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);
+            if(user != null){
+                user.FoodTrucksItems = null;
+                _context.SaveChanges();
+            }
+        }
 
         public PasswordDTO HashPassword(string password){
 
@@ -176,7 +193,7 @@ namespace PrometoFoodTrucksBackEnds.Services
 
         public UserModel GetUserById(int id)
         {
-            return _context.UserInfo.SingleOrDefault(user => user.ID == id);
+            return _context.UserInfo.SingleOrDefault(user => user.UserID == id);
         }
 
 
@@ -207,7 +224,7 @@ namespace PrometoFoodTrucksBackEnds.Services
             // Now we need to query through our database to find the user based on the name inside the database
             UserModel foundUser = _context.UserInfo.SingleOrDefault(user => user.Username == username);
 
-            UserInfo.UserId = foundUser.ID;
+            UserInfo.UserId = foundUser.UserID;
 
             // Assign the 
             UserInfo.PublisherName = foundUser.Username;

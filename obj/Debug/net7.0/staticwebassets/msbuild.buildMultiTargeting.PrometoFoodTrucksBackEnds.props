@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\PrometoFoodTrucksBackEnds.props" />
+</Project>

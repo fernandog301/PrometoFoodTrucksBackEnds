@@ -13,6 +13,9 @@ namespace PrometoFoodTrucksBackEnds.Models
         
         // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
             public int ID { get; set; }
+
+            public int UserId { get; set;}
+            public UserModel User { get; set;}
             public string? Address { get; set; }
             public string? City { get; set; }
             public string? State { get; set; }
@@ -32,7 +35,7 @@ namespace PrometoFoodTrucksBackEnds.Models
             public string? Rating { get; set; }
             public bool? IsDeleted { get; set; }
 
-            public List<MenuItem> menuItems { get; set; }
+            public List<MenuItem>? menuItems { get; set; }
 
             // public class MenuItem
             // {
@@ -40,10 +43,10 @@ namespace PrometoFoodTrucksBackEnds.Models
             // [Key]
             public class MenuItem
     {
-            
+            public FoodTrucksIteamsModel? FoodTrucks { get; set; }
+            public int FoodTrucksID { get; set;} 
             [Key]
             public int itemId { get; set; }
-
             public string? itemName { get; set; }
 
             public string? itemPrice { get; set; }

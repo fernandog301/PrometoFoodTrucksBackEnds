@@ -32,12 +32,12 @@ namespace PrometoFoodTrucksBackEnds.Controllers
         //     return _data.GetTruckInfo(truckId);
         // }
 
-        // Add bathroom
+        // Add Food Truck
         [HttpPost]
-        [Route("AddFoodTruck")]
-        public bool AddFoodTruck(FoodTrucksIteamsModel newFoodTruck)
+        [Route("AddFoodTruckItems")]
+        public bool AddFoodTruckItems(FoodTrucksIteamsModel foodTruckItems)
         {
-            return _data.AddFoodTruck(newFoodTruck);
+            return _data.AddFoodTruckItems(foodTruckItems);
         }
 
         [HttpGet]
@@ -47,7 +47,24 @@ namespace PrometoFoodTrucksBackEnds.Controllers
             return _data.GetAllFoodTrucks();
         }
 
-        // Get bathrooms as GeoJSON data
+        [HttpGet]
+        [Route("GetAllFoodTruckItems")]
+        public List<FoodTrucksIteamsModel>GetAllFoodTruckItems()
+        {
+            return _data.GetAllFoodTruckItems();
+        }
+
+
+        [HttpPost]
+        [Route("CreateFoodTruckForUser")]
+        public void CreateFoodTruckForUser(int userId, FoodTrucksIteamsModel foodTrucks)
+        {
+            _data.CreateFoodTruckForUser(userId, foodTrucks);
+
+        }
+
+
+        // Get Food Trucks as GeoJSON data
         [HttpGet]
         [Route("GetAllFoodTrucksAsGeoJSON")]
         public ActionResult<string> GetAllFoodTrucksAsGeoJSON()
@@ -64,21 +81,20 @@ namespace PrometoFoodTrucksBackEnds.Controllers
             return Ok(geoJSON);
         }
 
-        // Update bathroom
-        // Since we are updating a bathroom, we want to take in the entire BathroomModel and call it bathroomUpdate
+        // Update Food Truck
         [HttpPut]
-        [Route("UpdateFoodTruck")]
-        public bool UpdateFoodTruck(FoodTrucksIteamsModel FoodTruckUpdate)
+        [Route("UpdateFoodTruckForUser")]
+        public void UpdateFoodTruckForUser(int userId, FoodTrucksIteamsModel FoodTruckUpdate)
         {
-            return _data.UpdateFoodTruck(FoodTruckUpdate);
+            _data.UpdateFoodTruckForUser(userId, FoodTruckUpdate);
         }
 
-        // Delete bathroom
+        // Delete Food Truck
         [HttpDelete]
-        [Route("DeleteFoodTruck")]
-        public bool DeleteFoodTruck(FoodTrucksIteamsModel FoodTruckToDelete)
+        [Route("DeleteFoodTruckForUser")]
+        public void DeleteFoodTruckForUser(int userId)
         {
-            return _data.DeleteFoodTruck(FoodTruckToDelete);
+            _data.DeleteFoodTruckForUser(userId);
         }
 
 
@@ -91,24 +107,24 @@ namespace PrometoFoodTrucksBackEnds.Controllers
         }
 
         [HttpPost]
-        [Route("AddMenu")]
-        public bool AddMenu(MenuItem menuToAdd)
+        [Route("AddMenuForFoodTruck")]
+        public void AddMenuForFoodTruck(int userId, MenuItem menuToAdd)
         {
-            return _data.AddMenu(menuToAdd);
+            _data.AddMenuForFoodTruck(userId, menuToAdd);
         }
 
         [HttpDelete]
         [Route("DeleteMenuItem")]
-        public bool DeleteMenuItem(int itemId)
+        public void DeleteMenuItem(int userId, int menuItemId)
         {
-            return _data.DeleteMenuItem(itemId);
+            _data.DeleteMenuItem(userId,menuItemId);
         }
 
         [HttpPut]
         [Route("UpdateMenuItem")]
-        public bool UpdateMenuItem(MenuItem menuItems)
+        public void UpdateMenuItem(int userId, string newItemName, string newItemPrice,  MenuItem updateMenuItem)
         {
-            return _data.UpdateMenuItem(menuItems);
+            _data.UpdateMenuItem(userId, newItemName, newItemPrice, updateMenuItem);
         }
 
 
