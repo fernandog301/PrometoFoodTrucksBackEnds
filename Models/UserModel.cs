@@ -14,7 +14,6 @@ namespace PrometoFoodTrucksBackEnds.Models
         public string? Salt { get; set; }
         public string? Hash { get; set; }
         
-       public List<FoodTrucksIteamsModel>? FoodTrucksItems { get; set; }
         public UserModel(){
             
         }

@@ -52,28 +52,28 @@ namespace PrometoFoodTrucksBackEnds.Services
         //return _data.AddUser(UserToAdd);
         }
 
-        public void FoodTrucksWithUser(int userId, int FoodTrucksID)
-        {
-            var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);
-            var FoodTruck = _context.TruckInfos.SingleOrDefault(truck => truck.ID == FoodTrucksID);
-            if(user != null && FoodTruck != null){
-                if(user.FoodTrucksItems == null)
-                {
-                user.FoodTrucksItems = new List<FoodTrucksIteamsModel>();
-                }
-                user.FoodTrucksItems.Add(FoodTruck);
-                _context.SaveChanges();
-            }
-        }
-        
-        public void RemoveFoodTruckFromUser(int userId)
-        {
-            var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);
-            if(user != null){
-                user.FoodTrucksItems = null;
-                _context.SaveChanges();
-            }
-        }
+        // public void FoodTrucksWithUser(int userId, int FoodTrucksID)
+        // {
+        //     var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);
+        //     var FoodTruck = _context.TruckInfos.SingleOrDefault(truck => truck.ID == FoodTrucksID);
+        //     if(user != null && FoodTruck != null){
+        //         if(user.FoodTrucksItems == null)
+        //         {
+        //         user.FoodTrucksItems = new List<FoodTrucksIteamsModel>();
+        //         }
+        //         user.FoodTrucksItems.Add(FoodTruck);
+        //         _context.SaveChanges();
+        //     }
+        // }
+
+        // public void RemoveFoodTruckFromUser(int userId)
+        // {
+        //     var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);
+        //     if(user != null){
+        //         user.FoodTrucksItems = null;
+        //         _context.SaveChanges();
+        //     }
+        // }
 
         public PasswordDTO HashPassword(string password){
 

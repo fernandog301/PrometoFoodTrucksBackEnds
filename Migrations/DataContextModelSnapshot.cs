@@ -90,6 +90,9 @@ namespace PrometoFoodTrucksBackEnds.Migrations
                     b.Property<int>("FoodTrucksID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("FoodTrucksIteamsModelID")
+                        .HasColumnType("int");
+
                     b.Property<string>("itemName")
                         .HasColumnType("nvarchar(max)");
 
@@ -98,7 +101,7 @@ namespace PrometoFoodTrucksBackEnds.Migrations
 
                     b.HasKey("itemId");
 
-                    b.HasIndex("FoodTrucksID");
+                    b.HasIndex("FoodTrucksIteamsModelID");
 
                     b.ToTable("MenuItems");
                 });
@@ -128,7 +131,7 @@ namespace PrometoFoodTrucksBackEnds.Migrations
             modelBuilder.Entity("PrometoFoodTrucksBackEnds.Models.FoodTrucksIteamsModel", b =>
                 {
                     b.HasOne("PrometoFoodTrucksBackEnds.Models.UserModel", "User")
-                        .WithMany("FoodTrucksItems")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -138,23 +141,14 @@ namespace PrometoFoodTrucksBackEnds.Migrations
 
             modelBuilder.Entity("PrometoFoodTrucksBackEnds.Models.FoodTrucksIteamsModel+MenuItem", b =>
                 {
-                    b.HasOne("PrometoFoodTrucksBackEnds.Models.FoodTrucksIteamsModel", "FoodTrucks")
+                    b.HasOne("PrometoFoodTrucksBackEnds.Models.FoodTrucksIteamsModel", null)
                         .WithMany("menuItems")
-                        .HasForeignKey("FoodTrucksID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FoodTrucks");
+                        .HasForeignKey("FoodTrucksIteamsModelID");
                 });
 
             modelBuilder.Entity("PrometoFoodTrucksBackEnds.Models.FoodTrucksIteamsModel", b =>
                 {
                     b.Navigation("menuItems");
-                });
-
-            modelBuilder.Entity("PrometoFoodTrucksBackEnds.Models.UserModel", b =>
-                {
-                    b.Navigation("FoodTrucksItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -28,13 +28,13 @@ namespace PrometoFoodTrucksBackEnds.Services.Context;
         {
             // base.OnModelCreating(modelBuilder);
             // SeedData(modelBuilder);
-            modelBuilder.Entity<FoodTrucksIteamsModel>()
+            modelBuilder.Entity<FoodTrucksIteamsModel>();
             
             // .HasKey(m => m.itemId)
             // .HasMany(menu => menu.Menu) // Menu has many Items
-            .HasOne(u  => u.User) 
-            .WithMany(u => u.FoodTrucksItems)
-            .HasForeignKey(u => u.UserId);
+            // .HasOne(u  => u.User) 
+            // .WithMany(u => u.FoodTrucksItems)
+            // .HasForeignKey(u => u.UserId);
             
             modelBuilder.Entity<UserModel>()
                 .HasKey(u => u.UserID);

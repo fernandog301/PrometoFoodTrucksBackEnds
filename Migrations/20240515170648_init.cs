@@ -65,23 +65,23 @@ namespace PrometoFoodTrucksBackEnds.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FoodTrucksID = table.Column<int>(type: "int", nullable: false),
                     itemName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    itemPrice = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    itemPrice = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FoodTrucksIteamsModelID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_MenuItems", x => x.itemId);
                     table.ForeignKey(
-                        name: "FK_MenuItems_TruckInfos_FoodTrucksID",
-                        column: x => x.FoodTrucksID,
+                        name: "FK_MenuItems_TruckInfos_FoodTrucksIteamsModelID",
+                        column: x => x.FoodTrucksIteamsModelID,
                         principalTable: "TruckInfos",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ID");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_MenuItems_FoodTrucksID",
+                name: "IX_MenuItems_FoodTrucksIteamsModelID",
                 table: "MenuItems",
-                column: "FoodTrucksID");
+                column: "FoodTrucksIteamsModelID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TruckInfos_UserId",
