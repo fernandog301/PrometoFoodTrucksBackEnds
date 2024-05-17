@@ -7,6 +7,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PrometoFoodTrucksBackEnds.Models;
 using PrometoFoodTrucksBackEnds.Models.DTO;
@@ -23,45 +25,41 @@ namespace PrometoFoodTrucksBackEnds.Services
             _context = context;
         }
 
-        public bool DoesUserExist(string Username)
+        public bool DoesUserExist(string username)
         {
-            return _context.UserInfo.SingleOrDefault(user => user.Username == Username) != null;
+            return _context.UserInfo.SingleOrDefault(user => user.Username == username) != null;
         }
-        public bool AddUser(CreateAccountDTO UserToAdd)
+        public bool AddUser(CreateAccountDTO userToAdd)
         {
             bool result = false;
-
-            if(!DoesUserExist(UserToAdd.Username)){
+            if (!DoesUserExist(userToAdd.Username))
+            {                
                 UserModel newUser = new UserModel();
-
-                var hashPassword = HashPassword(UserToAdd.Password);
-                newUser.UserID = UserToAdd.ID;
-                newUser.Username = UserToAdd.Username;
+                var hashPassword = HashPassword(userToAdd.Password);
                 
-                newUser.Salt = hashPassword.Salt;
-                newUser.Hash = hashPassword.Hash;
+                    newUser.UserID = userToAdd.ID;
+                    newUser.Username = userToAdd.Username;
+                    newUser.Salt = hashPassword.Salt;
+                    newUser.Hash = hashPassword.Hash;
+                
+                
 
                 _context.Add(newUser);
-                result = _context.SaveChanges() != 0;
-
-
-
-                result = true;
+                return _context.SaveChanges() != 0;
             }
-            return result;  
+            return result; 
         //return _data.AddUser(UserToAdd);
         }
 
-        // public void FoodTrucksWithUser(int userId, int FoodTrucksID)
-        // {
+        //  public void FoodTrucksWithUser(int userId, int foodTrucksID)
+        // {   
+
         //     var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);
-        //     var FoodTruck = _context.TruckInfos.SingleOrDefault(truck => truck.ID == FoodTrucksID);
-        //     if(user != null && FoodTruck != null){
-        //         if(user.FoodTrucksItems == null)
-        //         {
-        //         user.FoodTrucksItems = new List<FoodTrucksIteamsModel>();
-        //         }
-        //         user.FoodTrucksItems.Add(FoodTruck);
+        //     var foodTruck = _context.TruckInfos.SingleOrDefault(truck => truck.ID == foodTrucksID);
+        //     if (user != null && foodTruck != null)
+        //     {
+        //         user.foodTrucks ??= new List<UserModel>();
+        //         user.foodTrucks.Add(foodTruck);
         //         _context.SaveChanges();
         //     }
         // }
@@ -70,7 +68,7 @@ namespace PrometoFoodTrucksBackEnds.Services
         // {
         //     var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);
         //     if(user != null){
-        //         user.FoodTrucksItems = null;
+        //         user.UserInfo = null;
         //         _context.SaveChanges();
         //     }
         // }
@@ -160,6 +158,7 @@ namespace PrometoFoodTrucksBackEnds.Services
         public UserModel GetUserByUsername(string username)
         {
             return _context.UserInfo.SingleOrDefault(user => user.Username == username);
+
         }
 
 
@@ -207,34 +206,147 @@ namespace PrometoFoodTrucksBackEnds.Services
             // We are only sending over the username
             // If username found, delete user
 
-            UserModel foundUser = GetUserByUsername(userToDelete);
-
-            bool result = false;
-
+             var foundUser = GetUserByUsername(userToDelete);
             if (foundUser != null)
             {
-                // If we have found a user
-
-                _context.Remove<UserModel>(foundUser);
-                result = _context.SaveChanges() != 0;
+                _context.Remove(foundUser);
+                return _context.SaveChanges() != 0;
             }
-
-            return result;
+            return false;
         }
 
         public UserIdDTO GetUserIdDTOByUsername(string username)
         {
-            UserIdDTO UserInfo = new UserIdDTO();
-
-            // Now we need to query through our database to find the user based on the name inside the database
-            UserModel foundUser = _context.UserInfo.SingleOrDefault(user => user.Username == username);
-
-            UserInfo.UserId = foundUser.UserID;
-
-            // Assign the 
-            UserInfo.PublisherName = foundUser.Username;
-
-            return UserInfo;
+            var foundUser = _context.UserInfo.FirstOrDefault(user => user.Username == username);
+            if (foundUser != null)
+            {
+                return new UserIdDTO { UserId = foundUser.UserID};
+            }
+            return null;
         }
+        
+
+        public string GetAllFoodTrucksAsGeoJSON()
+        {
+            // Your SQL query to generate GeoJSON data
+            string sqlQuery = @"
+                DECLARE @featureList nvarchar(max) =
+                (
+                    SELECT
+                    'Feature'                                           as 'type',
+                    address                                             as 'properties.address',
+                    city                                                as 'properties.city',
+                    state                                               as 'properties.state',
+                    zipCode                                             as 'properties.zipCode',
+                    name                                                as 'properties.name',
+                    image                                               as 'properties.image',
+                    schedule                                            as 'properties.schedule',
+                    description                                         as 'properties.description',
+                    category                                            as 'properties.category',
+                    IsDeleted                                           as 'properties.IsDeleted',
+                    
+                    'Point'                                             as 'geometry.type',
+                    JSON_QUERY(CONCAT('[', CAST(longitude AS decimal(18, 15)), ', ', CAST(latitude AS decimal(18, 15)), ']')) as 'geometry.coordinates'                
+                    FROM TruckInfos
+                FOR JSON PATH
+            )
+            
+
+                DECLARE @featureCollection nvarchar(max) = (
+                    SELECT 'FeatureCollection' as 'type',
+                    JSON_QUERY(@featureList)   as 'features'
+                    FOR JSON PATH, WITHOUT_ARRAY_WRAPPER
+                )
+
+                SELECT @featureCollection";
+
+            using (SqlConnection connection = new SqlConnection(_context.Database.GetConnectionString()))
+            {
+                SqlCommand command = new SqlCommand(sqlQuery, connection);
+                connection.Open();
+
+                string geoJSON = (string)command.ExecuteScalar();
+
+                return geoJSON;
+            }
+        }
+
+        public bool AddFoodTruckItems(UserModel foodTruckItems)
+        {
+            _context.UserInfo.Add(foodTruckItems);
+            return _context.SaveChanges() != 0;
+        }
+
+        public void UpdateFoodTruckForUser(int userId, UserModel FoodTruckUpdate)
+        {
+            var exisitingIteam = _context.UserInfo.FirstOrDefault(ft => ft.UserID == userId);
+            if (exisitingIteam != null)
+            {
+                exisitingIteam.Name = FoodTruckUpdate.Name;
+                exisitingIteam.image = FoodTruckUpdate.image;
+                exisitingIteam.schedule = FoodTruckUpdate.schedule;
+                exisitingIteam.description = FoodTruckUpdate.description;
+                exisitingIteam.category = FoodTruckUpdate.category;
+                exisitingIteam.Rating = FoodTruckUpdate.Rating;
+                exisitingIteam.Address = FoodTruckUpdate.Address;
+                exisitingIteam.State = FoodTruckUpdate.State;
+                exisitingIteam.ZipCode = FoodTruckUpdate.ZipCode;
+                exisitingIteam.Latitude = FoodTruckUpdate.Latitude;
+                exisitingIteam.Longitude = FoodTruckUpdate.Longitude;
+                _context.SaveChanges();
+            }
+        }
+
+
+        public void AddMenuForFoodTruck(int userId, UserModel.MenuItem menuToAdd)
+        {
+            var user = _context.UserInfo.Include(u => u.menuItems).FirstOrDefault(u => u.UserID == userId);
+
+            if (user != null)
+            {
+                if (user.menuItems == null)
+                {
+                    user.menuItems = new List<UserModel.MenuItem>();
+                }
+
+                menuToAdd.FoodTrucksID = user.UserID; // Assuming FoodTrucksID is UserID
+                user.menuItems.Add(menuToAdd);
+                _context.SaveChanges();
+            }
+            // return false; // If truck with given id doesn't exist
+        }
+
+        public void DeleteMenuItem(int userId, int menuItemId)
+        {
+            var user = _context.UserInfo.Include(u => u.menuItems).FirstOrDefault(u => u.UserID == userId);
+
+            if (user != null)
+            {
+                var menuItemToDelete = user.menuItems.FirstOrDefault(mi => mi.itemId == menuItemId);
+                if (menuItemToDelete != null)
+                {
+                    user.menuItems.Remove(menuItemToDelete);
+                    _context.SaveChanges();
+                }
+            }
+            // return false; // If menu item with given id doesn't exist
+        }
+
+        public void UpdateMenuItem(int userId, UserModel.MenuItem updateMenuItem)
+        {
+            var user = _context.UserInfo.Include(u => u.menuItems).FirstOrDefault(u => u.UserID == userId);
+
+            if (user != null)
+            {
+                var menuItemToUpdate = user.menuItems.FirstOrDefault(mi => mi.FoodTrucksID == updateMenuItem.itemId);
+                if (menuItemToUpdate != null)
+                {
+                    menuItemToUpdate.itemName = updateMenuItem.itemName;
+                    menuItemToUpdate.itemPrice = updateMenuItem.itemPrice;
+                    _context.SaveChanges();
+                }
+            }
+        }
+
     }
 }

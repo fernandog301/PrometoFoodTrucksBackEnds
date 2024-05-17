@@ -28,7 +28,7 @@ namespace PrometoFoodTrucksBackEnds.Services.Context;
         {
             // base.OnModelCreating(modelBuilder);
             // SeedData(modelBuilder);
-            modelBuilder.Entity<FoodTrucksIteamsModel>();
+            // modelBuilder.Entity<FoodTrucksIteamsModel>();
             
             // .HasKey(m => m.itemId)
             // .HasMany(menu => menu.Menu) // Menu has many Items

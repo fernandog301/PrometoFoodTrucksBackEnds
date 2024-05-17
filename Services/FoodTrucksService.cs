@@ -75,6 +75,39 @@ namespace PrometoFoodTrucksBackEnds.Services
             }
         }
 
+    //     public object GetUserWithFoodTrucks(string username)
+    // {
+    //     var user = _context.UserInfo
+    //         .Include(u => u.foodTrucks) // Ensure food trucks are loaded
+    //         .FirstOrDefault(u => u.Username == username);
+
+    //     if (user == null)
+    //     {
+    //         return null; // Handle not found case as needed
+    //     }
+    //     return new
+    //     {
+    //         user.UserID,
+    //         user.Username,
+    //         FoodTrucks = user.foodTrucks.Select(ft => new
+    //         {
+    //             ft.ID,
+    //             ft.Name,
+    //             ft.Address,
+    //             ft.City,
+    //             ft.State,
+    //             ft.ZipCode,
+    //             ft.image,
+    //             ft.schedule,
+    //             ft.description,
+    //             ft.category,
+    //             ft.IsDeleted,
+    //             ft.Latitude,
+    //             ft.Longitude
+    //         }).ToList()
+    //     };
+    // }
+        
         public List<FoodTrucksIteamsModel>GetAllFoodTruckItems()
         {
             return _context.TruckInfos.ToList();

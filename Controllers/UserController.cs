@@ -56,9 +56,9 @@ namespace PrometoFoodTrucksBackEnds.Controllers
         [Route("AddUser")]
 
         // UserToAdd is a variable we created
-        public bool AddUser(CreateAccountDTO UserToAdd)
+        public bool AddUser(CreateAccountDTO userToAdd)
         {
-            return _data.AddUser(UserToAdd);
+            return _data.AddUser(userToAdd);
         }
 
 
@@ -79,6 +79,12 @@ namespace PrometoFoodTrucksBackEnds.Controllers
             return _data.UpdateUsername(id, username);
         }
 
+        [HttpGet]
+        [Route("GetUserIdDTOByUsername/{username}")]
+        public UserIdDTO GetUserIdDTOByUsername(string username)
+        {
+            return _data.GetUserIdDTOByUsername(username);
+        }
 
         //DeleteUser endpoint
         [HttpDelete]
@@ -97,6 +103,51 @@ namespace PrometoFoodTrucksBackEnds.Controllers
         {
             return _data.GetUserIdDTOByUsername(username);
         }
+        
+        [HttpGet]
+        [Route("GetAllFoodTrucksAsGeoJSON")]
+        public string GetAllFoodTrucksAsGeoJSON()
+        {
+            return _data.GetAllFoodTrucksAsGeoJSON();
+        }
+
+
+        [HttpPost]
+        [Route("AddFoodTruckItems")]
+        public bool AddFoodTruckItems(UserModel foodTruckItems)
+        {
+            return _data.AddFoodTruckItems(foodTruckItems);
+        }
+
+        [HttpPut]
+        [Route("UpdateFoodTruckForUser")]
+        public void UpdateFoodTruckForUser(int userId, UserModel FoodTruckUpdate)
+        {
+            _data.UpdateFoodTruckForUser(userId, FoodTruckUpdate);
+        }
+
+        [HttpPost]
+        [Route("AddMenuForFoodTruck")]
+        public void AddMenuForFoodTruck(int userId, UserModel.MenuItem menuToAdd)
+        {
+            _data.AddMenuForFoodTruck(userId, menuToAdd);
+        }
+
+
+        [HttpDelete]
+        [Route("DeleteUser")]
+        public void DeleteMenuItem(int userId, int menuItemId)
+        {
+            _data.DeleteMenuItem(userId, menuItemId);
+        }
+
+        [HttpPut]
+        [Route("UpdateMenuItem")]
+        public void UpdateMenuItem(int userId, UserModel.MenuItem updateMenuItem)
+        {
+            _data.UpdateMenuItem(userId,updateMenuItem);
+        }
+
 
     }
 }

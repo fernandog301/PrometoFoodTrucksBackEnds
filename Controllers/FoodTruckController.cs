@@ -63,6 +63,18 @@ namespace PrometoFoodTrucksBackEnds.Controllers
 
         }
 
+        // [HttpGet]
+        // [Route("GetUserWithFoodTrucks/{username}")]
+        // public IActionResult GetUserWithFoodTrucks(string username)
+        // {
+        // var userWithFoodTrucks = _data.GetUserWithFoodTrucks(username);
+        // if (userWithFoodTrucks == null)
+        // {
+        //     return NotFound("User not found");
+        // }
+        // return Ok(userWithFoodTrucks);
+        // }
+
 
         // Get Food Trucks as GeoJSON data
         [HttpGet]

@@ -11,11 +11,9 @@ namespace PrometoFoodTrucksBackEnds.Models
     public class FoodTrucksIteamsModel
     {
         
-        // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
             public int ID { get; set; }
 
             public int UserId { get; set;}
-            public UserModel? User { get; set;}
             public string? Address { get; set; }
             public string? City { get; set; }
             public string? State { get; set; }
@@ -37,10 +35,6 @@ namespace PrometoFoodTrucksBackEnds.Models
 
             public List<MenuItem>? menuItems { get; set; }
 
-            // public class MenuItem
-            // {
-            // // public int TruckId { get; set; } // Foreign key to link to FoodTrucks table
-            // [Key]
             public class MenuItem
     {
             public int FoodTrucksID { get; set;} 
@@ -51,19 +45,6 @@ namespace PrometoFoodTrucksBackEnds.Models
             public string? itemPrice { get; set; }
     }
         
-// (
-                    //     SELECT
-                    //         itemId                                      as 'itemId',
-                    //         itemName                                    as 'itemName',
-                    //         itemPrice                                   as 'itemPrice'
-                    //     FROM MenuItems AS menu
-                    //     WHERE menu.ID  = TruckInfos.itemId
-                    //     FOR JSON PATH
-                    // )                                                   as 'properties.menuItems',
-        
-
-
-
         public FoodTrucksIteamsModel(){}
 
     }
