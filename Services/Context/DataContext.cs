@@ -6,19 +6,14 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PrometoFoodTrucksBackEnds.Models;
 using PrometoFoodTrucksBackEnds.Models.DTO;
-using static PrometoFoodTrucksBackEnds.Models.FoodTrucksIteamsModel;
 
 namespace PrometoFoodTrucksBackEnds.Services.Context;
 
     public class DataContext : DbContext
     {
         public DbSet<UserModel>UserInfo{ get; set; }
-        public DbSet<MenuItem> MenuItems { get; set; }
-        // public DbSet<MenuItem>? menuItems { get; set; }
+        public DbSet<UserModel.MenuItem> MenuItems { get; set; }
 
-         // Add MenuItem DbSet
-        // public DbSet<MenuDTO> Menus { get; set; } // Add MenuDTO DbSet
-        public DbSet<FoodTrucksIteamsModel>TruckInfos{ get; set; }
 
         
 
@@ -26,31 +21,22 @@ namespace PrometoFoodTrucksBackEnds.Services.Context;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // base.OnModelCreating(modelBuilder);
-            // SeedData(modelBuilder);
-            // modelBuilder.Entity<FoodTrucksIteamsModel>();
             
-            // .HasKey(m => m.itemId)
-            // .HasMany(menu => menu.Menu) // Menu has many Items
-            // .HasOne(u  => u.User) 
-            // .WithMany(u => u.FoodTrucksItems)
-            // .HasForeignKey(u => u.UserId);
             
             modelBuilder.Entity<UserModel>()
                 .HasKey(u => u.UserID);
 
-            // modelBuilder.Entity<UserModel>().HasNoKey();
+             // Configuring the primary key for MenuItem
+            modelBuilder.Entity<UserModel.MenuItem>()
+                .HasKey(mi => mi.itemId);
 
-            // Item belongs to one Menu
-            // .HasForeignKey(item => item.MenuDTOId); // Foreign key property
+            // Configuring relationships, if any
+            modelBuilder.Entity<UserModel>()
+                .HasMany(u => u.menuItems)
+                .WithOne()
+                .HasForeignKey(mi => mi.FoodTrucksID);
             
-            // modelBuilder.Entity<MenuItem>()
-            // .Property(u => u.itemName)
-            // .HasMaxLength(100);
-
-            // modelBuilder.Entity<MenuItem>()
-            // .Property(u => u.itemPrice)
-            // .HasColumnType("decimal(18,2)");
+            base.OnModelCreating(modelBuilder);
 
 
         }

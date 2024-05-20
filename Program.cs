@@ -8,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<UserServices>();
 builder.Services.AddScoped<PasswordServices>();
-builder.Services.AddScoped<FoodTrucksService>();
 
 var connectionString = builder.Configuration.GetConnectionString("MyPrometoString");
 

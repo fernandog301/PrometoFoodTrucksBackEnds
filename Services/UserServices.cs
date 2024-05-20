@@ -48,30 +48,8 @@ namespace PrometoFoodTrucksBackEnds.Services
                 return _context.SaveChanges() != 0;
             }
             return result; 
-        //return _data.AddUser(UserToAdd);
         }
 
-        //  public void FoodTrucksWithUser(int userId, int foodTrucksID)
-        // {   
-
-        //     var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);
-        //     var foodTruck = _context.TruckInfos.SingleOrDefault(truck => truck.ID == foodTrucksID);
-        //     if (user != null && foodTruck != null)
-        //     {
-        //         user.foodTrucks ??= new List<UserModel>();
-        //         user.foodTrucks.Add(foodTruck);
-        //         _context.SaveChanges();
-        //     }
-        // }
-
-        // public void RemoveFoodTruckFromUser(int userId)
-        // {
-        //     var user = _context.UserInfo.SingleOrDefault(user => user.UserID == userId);
-        //     if(user != null){
-        //         user.UserInfo = null;
-        //         _context.SaveChanges();
-        //     }
-        // }
 
         public PasswordDTO HashPassword(string password){
 
