@@ -12,8 +12,7 @@ namespace PrometoFoodTrucksBackEnds.Services.Context;
     public class DataContext : DbContext
     {
         public DbSet<UserModel>UserInfo{ get; set; }
-        public DbSet<UserModel.MenuItem> MenuItems { get; set; }
-
+        
 
         
 
@@ -27,14 +26,10 @@ namespace PrometoFoodTrucksBackEnds.Services.Context;
                 .HasKey(u => u.UserID);
 
              // Configuring the primary key for MenuItem
-            modelBuilder.Entity<UserModel.MenuItem>()
-                .HasKey(mi => mi.itemId);
+            
 
             // Configuring relationships, if any
-            modelBuilder.Entity<UserModel>()
-                .HasMany(u => u.menuItems)
-                .WithOne()
-                .HasForeignKey(mi => mi.FoodTrucksID);
+
             
             base.OnModelCreating(modelBuilder);
 

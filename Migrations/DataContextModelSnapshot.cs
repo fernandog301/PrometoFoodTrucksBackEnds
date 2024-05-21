@@ -33,10 +33,19 @@ namespace PrometoFoodTrucksBackEnds.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("City")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Hash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("IsDeleted")
@@ -57,6 +66,9 @@ namespace PrometoFoodTrucksBackEnds.Migrations
                     b.Property<string>("Salt")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Schedule")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("State")
                         .HasColumnType("nvarchar(max)");
 
@@ -67,59 +79,15 @@ namespace PrometoFoodTrucksBackEnds.Migrations
                     b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("category")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("schedule")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserID");
-
-                    b.ToTable("UserInfo");
-                });
-
-            modelBuilder.Entity("PrometoFoodTrucksBackEnds.Models.UserModel+MenuItem", b =>
-                {
-                    b.Property<int>("itemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("itemId"));
-
-                    b.Property<int>("FoodTrucksID")
-                        .HasColumnType("int");
-
                     b.Property<string>("itemName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("itemPrice")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("itemId");
+                    b.HasKey("UserID");
 
-                    b.HasIndex("FoodTrucksID");
-
-                    b.ToTable("MenuItems");
-                });
-
-            modelBuilder.Entity("PrometoFoodTrucksBackEnds.Models.UserModel+MenuItem", b =>
-                {
-                    b.HasOne("PrometoFoodTrucksBackEnds.Models.UserModel", null)
-                        .WithMany("menuItems")
-                        .HasForeignKey("FoodTrucksID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PrometoFoodTrucksBackEnds.Models.UserModel", b =>
-                {
-                    b.Navigation("menuItems");
+                    b.ToTable("UserInfo");
                 });
 #pragma warning restore 612, 618
         }

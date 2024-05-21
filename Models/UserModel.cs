@@ -11,9 +11,9 @@ namespace PrometoFoodTrucksBackEnds.Models
             [Key]
             public int UserID { get; set; }
 
-            [Required]
-            public string? Username { get; set; }
-
+            
+            public string Username { get; set; }
+            
             public string? Address { get; set; }
             
             public string? City { get; set; }
@@ -28,38 +28,31 @@ namespace PrometoFoodTrucksBackEnds.Models
             
             public string? Name { get; set; }
 
-            public string? image { get; set; }
+            public string? Image { get; set; }
 
-            public string? schedule { get; set; }
+            public string? Schedule { get; set; }
 
-            public string? description { get; set; }
+            public string? Description { get; set; }
 
-            public string? category { get; set; }
+            public string? Category { get; set; }
 
             public string? Rating { get; set; }
             
             public bool? IsDeleted { get; set; }
 
-            public List<MenuItem>? menuItems { get; set; } = new List<MenuItem>();
-
-
-            public string? Salt { get; set; }
-            public string? Hash { get; set; }
-            public UserModel(){
-                
-            }
-            public class MenuItem
-            {
-            public int FoodTrucksID { get; set;} 
-            [Key]
-            public int itemId { get; set; }
-
             public string? itemName { get; set; }
 
-
             public string? itemPrice { get; set; }
+            public string? Salt { get; set; }
+
+            public string? Hash { get; set; }
+            
+            
+            
+            
+        public UserModel(){
+                
             }
-        
         
 
     }

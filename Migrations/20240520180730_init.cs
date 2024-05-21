@@ -24,12 +24,14 @@ namespace PrometoFoodTrucksBackEnds.Migrations
                     Latitude = table.Column<double>(type: "float", nullable: true),
                     Longitude = table.Column<double>(type: "float", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    schedule = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    category = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Schedule = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Rating = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: true),
+                    itemName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    itemPrice = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Salt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Hash = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -37,40 +39,11 @@ namespace PrometoFoodTrucksBackEnds.Migrations
                 {
                     table.PrimaryKey("PK_UserInfo", x => x.UserID);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "MenuItems",
-                columns: table => new
-                {
-                    itemId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FoodTrucksID = table.Column<int>(type: "int", nullable: false),
-                    itemName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    itemPrice = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MenuItems", x => x.itemId);
-                    table.ForeignKey(
-                        name: "FK_MenuItems_UserInfo_FoodTrucksID",
-                        column: x => x.FoodTrucksID,
-                        principalTable: "UserInfo",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_MenuItems_FoodTrucksID",
-                table: "MenuItems",
-                column: "FoodTrucksID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "MenuItems");
-
             migrationBuilder.DropTable(
                 name: "UserInfo");
         }

@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using PrometoFoodTrucksBackEnds.Models;
 using PrometoFoodTrucksBackEnds.Models.DTO;
 using PrometoFoodTrucksBackEnds.Services;
+using static PrometoFoodTrucksBackEnds.Models.DTO.CreateAccountDTO;
 
 namespace PrometoFoodTrucksBackEnds.Controllers
 {
@@ -95,6 +96,14 @@ namespace PrometoFoodTrucksBackEnds.Controllers
             return _data.DeleteUser(userToDelete);
         }
 
+        [HttpGet]
+        [Route("GetAllFoodTrucks")]
+        public IEnumerable<UserModel> GetAllFoodTrucks()
+        {
+            return _data.GetAllFoodTrucks();
+        }
+
+
 
         // Get User By Username endpoint
         [HttpGet]
@@ -113,40 +122,48 @@ namespace PrometoFoodTrucksBackEnds.Controllers
 
 
         [HttpPost]
-        [Route("AddFoodTruckItems")]
-        public bool AddFoodTruckItems(UserModel foodTruckItems)
+        [Route("AddFoodTruck")]
+        public bool AddFoodTruck(UserModel userWithFoodTruck)
         {
-            return _data.AddFoodTruckItems(foodTruckItems);
+            return _data.AddFoodTruck(userWithFoodTruck);
         }
 
         [HttpPut]
-        [Route("UpdateFoodTruckForUser")]
-        public void UpdateFoodTruckForUser(int userId, UserModel FoodTruckUpdate)
+        [Route("UpdateFoodTruck")]
+        public bool UpdateFoodTruck(UserModel userWithUpdatedFoodTruck)
         {
-            _data.UpdateFoodTruckForUser(userId, FoodTruckUpdate);
+            return _data.UpdateFoodTruck(userWithUpdatedFoodTruck);
         }
-
-        [HttpPost]
-        [Route("AddMenuForFoodTruck")]
-        public void AddMenuForFoodTruck(int userId, UserModel.MenuItem menuToAdd)
-        {
-            _data.AddMenuForFoodTruck(userId, menuToAdd);
-        }
-
 
         [HttpDelete]
-        [Route("DeleteUser")]
-        public void DeleteMenuItem(int userId, int menuItemId)
+        [Route("DeleteFoodTruck")]
+
+        public bool DeleteFoodTruck(int userId)
         {
-            _data.DeleteMenuItem(userId, menuItemId);
+            return _data.DeleteFoodTruck(userId);
         }
 
-        [HttpPut]
-        [Route("UpdateMenuItem")]
-        public void UpdateMenuItem(int userId, UserModel.MenuItem updateMenuItem)
-        {
-            _data.UpdateMenuItem(userId,updateMenuItem);
-        }
+        // [HttpPost]
+        // [Route("AddMenuForFoodTruck")]
+        // public void AddMenuForFoodTruck(int userId, UserModel.MenuItem menuToAdd)
+        // {
+        //     _data.AddMenuForFoodTruck(userId, menuToAdd);
+        // }
+
+
+        // [HttpDelete]
+        // [Route("DeleteUser")]
+        // public void DeleteMenuItem(int userId, int menuItemId)
+        // {
+        //     _data.DeleteMenuItem(userId, menuItemId);
+        // }
+
+        // [HttpPut]
+        // [Route("UpdateMenuItem")]
+        // public void UpdateMenuItem(int userId, UserModel.MenuItem updateMenuItem)
+        // {
+        //     _data.UpdateMenuItem(userId,updateMenuItem);
+        // }
 
 
     }
