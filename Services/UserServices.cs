@@ -109,6 +109,7 @@ namespace PrometoFoodTrucksBackEnds.Services
 
         }
         
+        
         public IActionResult Login(LoginDTO User)
         {
             IActionResult Result = Unauthorized();
@@ -165,6 +166,9 @@ namespace PrometoFoodTrucksBackEnds.Services
 
         }
 
+        public UserModel GetCategoryUser(string Category){
+            return _context.UserInfo.SingleOrDefault(user => user.Category == Category);
+        }
 
         public bool UpdateUser(UserModel userToUpdate)
         {

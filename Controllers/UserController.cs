@@ -62,6 +62,12 @@ namespace PrometoFoodTrucksBackEnds.Controllers
             return _data.AddUser(userToAdd);
         }
 
+        [HttpGet]
+        [Route("GetCategoryUser/{Category}")]
+        public UserModel GetCategoryUser(string Category)
+        {
+            return _data.GetCategoryUser(Category);
+        }
 
         //UpdateUser endpoint
         [HttpPut]
